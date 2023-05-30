@@ -65,6 +65,7 @@ const Customizer = () => {
     if (!prompt) return alert("Please enter a prompt");
 
     try {
+      setGeneratingImg(true);
       // Call our backend to generate an ai image
       const render = await inference
         .textToImage({
