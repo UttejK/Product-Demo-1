@@ -1,15 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useSnapshot } from "valtio";
-
-import config from "../config/config";
 import state from "../store";
-import { download } from "../assets";
 import { downloadCanvasToImage, reader } from "../config/helpers";
 import { EditorTabs, FilterTabs, DecalTypes } from "../config/constants";
 import { fadeAnimation, slideAnimation } from "../config/motion";
-import deepai from "deepai";
 
 import { HfInference } from "@huggingface/inference";
 
@@ -21,7 +17,7 @@ import {
   Tab,
 } from "../components";
 
-const HF_ACCESS_TOKEN = "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"; //secret this later
+const HF_ACCESS_TOKEN = import.meta.env.VITE_HF_ACCESS_TOKEN;
 const inference = new HfInference(HF_ACCESS_TOKEN);
 
 const Customizer = () => {
@@ -72,8 +68,8 @@ const Customizer = () => {
           model: "stabilityai/stable-diffusion-2",
           inputs: prompt,
           parameters: {
-            width: 512,
-            height: 512,
+            width: 1024,
+            height: 1024,
           },
         })
         .then((blob) => {
