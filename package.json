@@ -13,6 +13,7 @@
     "@react-three/drei": "^9.70.0",
     "@react-three/fiber": "^8.13.0",
     "@react-three/postprocessing": "^2.14.6",
+    "deepai": "^1.0.21",
     "framer-motion": "^10.12.16",
     "maath": "^0.6.0",
     "react": "^18.2.0",

@@ -48,7 +48,7 @@ html {
 }
 
 .aipicker-textarea {
-  @apply w-full bg-transparent text-sm border border-gray-300 p-2 outline-none flex-1;
+  @apply w-full bg-transparent text-sm border border-gray-300 p-2 outline-none flex-1 resize-none;
 }
 
 .filepicker-container {

@@ -9,6 +9,7 @@ import { download } from "../assets";
 import { downloadCanvasToImage, reader } from "../config/helpers";
 import { EditorTabs, FilterTabs, DecalTypes } from "../config/constants";
 import { fadeAnimation, slideAnimation } from "../config/motion";
+import deepai from "deepai";
 
 import {
   CustomButton,
@@ -60,21 +61,19 @@ const Customizer = () => {
 
     try {
       // Call our backend to generate an ai image
+
       setGeneratingImg(true);
+      deepai.setApiKey("quickstart-QUdJIGlzIGNvbWluZy4uLi4K");
 
-      const response = await fetch("http://localhost:8080/api/v1/dalle", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt,
-        }),
+      const resp = await deepai.callStandardApi("text2img", {
+        text: prompt,
+        grid_size: "1",
       });
+      // console.log(resp);
 
-      const data = await response.json();
+      const data = resp.output_url;
 
-      handleDecals(type, `data:image/png;base64,${data.photo}`);
+      handleDecals(type, resp.output_url);
     } catch (error) {
       alert(error);
     } finally {
@@ -140,7 +139,9 @@ const Customizer = () => {
                     key={tab.name}
                     tab={tab}
                     handleClick={() => {
-                      setActiveEditorTab(tab.name);
+                      if (activeEditorTab === tab.name) {
+                        setActiveEditorTab("");
+                      } else setActiveEditorTab(tab.name);
                     }}
                   />
                 ))}
