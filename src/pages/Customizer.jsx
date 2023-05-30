@@ -11,6 +11,8 @@ import { EditorTabs, FilterTabs, DecalTypes } from "../config/constants";
 import { fadeAnimation, slideAnimation } from "../config/motion";
 import deepai from "deepai";
 
+import { HfInference } from "@huggingface/inference";
+
 import {
   CustomButton,
   AiPicker,
@@ -18,6 +20,9 @@ import {
   FilePicker,
   Tab,
 } from "../components";
+
+const HF_ACCESS_TOKEN = "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"; //secret this later
+const inference = new HfInference(HF_ACCESS_TOKEN);
 
 const Customizer = () => {
   const snap = useSnapshot(state);
@@ -61,19 +66,23 @@ const Customizer = () => {
 
     try {
       // Call our backend to generate an ai image
+      const render = await inference
+        .textToImage({
+          model: "stabilityai/stable-diffusion-2",
+          inputs: prompt,
+          parameters: {
+            width: 512,
+            height: 512,
+          },
+        })
+        .then((blob) => {
+          const image = new Image();
+          image.src = URL.createObjectURL(blob);
 
-      setGeneratingImg(true);
-      deepai.setApiKey("quickstart-QUdJIGlzIGNvbWluZy4uLi4K");
+          return image.src;
+        });
 
-      const resp = await deepai.callStandardApi("text2img", {
-        text: prompt,
-        grid_size: "1",
-      });
-      // console.log(resp);
-
-      const data = resp.output_url;
-
-      handleDecals(type, resp.output_url);
+      handleDecals(type, render);
     } catch (error) {
       alert(error);
     } finally {
@@ -82,10 +91,10 @@ const Customizer = () => {
     }
   };
 
-  const handleDecals = (type, result) => {
+  const handleDecals = (type, render) => {
     const decalType = DecalTypes[type];
 
-    state[decalType.stateProperty] = result;
+    state[decalType.stateProperty] = render;
 
     if (!activeFilterTab[decalType.filterTab]) {
       handleActiveFilterTab(decalType.filterTab);
