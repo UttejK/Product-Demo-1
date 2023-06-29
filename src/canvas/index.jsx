@@ -14,7 +14,7 @@ const RenderCanvas = () => {
       className="w-full max-w-full h-full transition-all ease-in"
     >
       <ambientLight intensity={0.5} />
-      <Environment files="./public/hdris/potsdamer_platz_1k.hdr" />
+      <Environment files="hdris/potsdamer_platz_1k.hdr" />
 
       <CameraRig>
         <Backdrop />
